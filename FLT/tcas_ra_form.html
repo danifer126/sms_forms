@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario TCAS RA - Operaciones de Vuelo</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">✈</div>
+            <div>
+                <h1>TCAS RA (Resolution Advisory)</h1>
+                <p>Registro detallado de evento TCAS RA</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Barra de progreso -->
+        <div class="progress-indicator">
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 50%;"></div>
+            </div>
+            <div class="step-text">Paso 3 de 6: Información Específica - TCAS RA</div>
+        </div>
+
+        <form id="tcasRaForm">
+            <!-- Información del Evento TCAS RA -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Información del Evento TCAS RA</h2>
+                    <p>Complete los detalles específicos del Resolution Advisory</p>
+                </div>
+                <div class="card-body">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="evasiveAction">¿Qué maniobra inicial le indicó el sistema TCAS RA? <span class="required">*</span></label>
+                            <select id="evasiveAction" name="evasiveAction" required>
+                                <option value="">Seleccione...</option>
+                                <option value="climb">Climb</option>
+                                <option value="descend">Descend</option>
+                                <option value="level_off">Level off / Adjust Vertical Speed</option>
+                                <option value="maintain_vertical_speed">Maintain Vertical Speed</option>
+                                <option value="monitor_vertical_speed"> Monitor Vertical Speed</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tcasBlueMode">¿La aeronave cuenta con el modo AP/FD TCAS (TCAS Blue)? <span class="required">*</span></label>
+                            <select id="tcasBlueMode" name="tcasBlueMode" required>
+                                <option value="">Seleccione...</option>
+                                <option value="si">Sí</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Información de la Otra Aeronave -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Información de la Otra Aeronave</h2>
+                    <p>Detalles sobre la aeronave que generó la alerta</p>
+                </div>
+                <div class="card-body">
+                    <div class="form-group full-width">
+                        <label for="atsUnit">¿Qué dependencia ATS atendía el vuelo?</label>
+                        <input type="text" id="atsUnit" name="atsUnit" placeholder="Ej:  Bogotá Llegadas , Bogotá Aproximación Terminal Sur">
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="otherAircraftType">¿Con qué tipo de tráfico tuvo la alerta?</label>
+                            <select id="otherAircraftType" name="otherAircraftType">
+                                <option value="">Seleccione...</option>
+                                <option value="aerolinea">Aerolínea</option>
+                                <option value="estado">Estado</option>
+                                <option value="instruccion">Instrucción</option>
+                                <option value="desconocido">Desconocido</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="flightPlan">¿Bajo qué reglas de vuelo estaba operando el tráfico en conflicto?</label>
+                            <select id="flightPlan" name="flightPlan">
+                                <option value="">Seleccione...</option>
+                                <option value="ifr">IFR</option>
+                                <option value="vfr">VFR</option>
+                                <option value="desconocido">Desconocido</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="airlineName">Nombre de la aerolínea con la cual se presentó el evento</label>
+                            <input type="text" id="airlineName" name="airlineName" placeholder="Ej: Avianca, etc">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="aircraftRegistration">Matrícula de la aeronave con la que tuvo el conflicto</label>
+                            <input type="text" id="aircraftRegistration" name="aircraftRegistration" placeholder="Ej: HK-4321">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botones de navegación -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-actions">
+                        <button type="button" class="btn" onclick="history.back()" style="background: var(--text-gray);">Regresar</button>
+                        <button type="submit" class="btn">Continuar a Descripción del Evento</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedData = sessionStorage.getItem('flightEventData');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                console.log('Datos cargados para TCAS RA:', data);
+            }
+
+            document.getElementById('tcasRaForm').addEventListener('submit', handleFormSubmit);
+
+            function handleFormSubmit(e) {
+                e.preventDefault();
+
+                const formData = new FormData(e.target);
+                const tcasRaData = {};
+                
+                for (let [key, value] of formData.entries()) {
+                    tcasRaData[key] = value;
+                }
+
+                const existingData = JSON.parse(sessionStorage.getItem('flightEventData') || '{}');
+                const combinedData = { ...existingData, tcasRaDetails: tcasRaData };
+                
+                sessionStorage.setItem('flightEventData', JSON.stringify(combinedData));
+                window.location.href = '../title_desc.html';
+            }
+        });
+    </script>
+</body>
+</html>

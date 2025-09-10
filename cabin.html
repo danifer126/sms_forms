@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario Específico - Operaciones de Cabina</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">✈</div>
+            <div>
+                <h1>Formulario Específico - Operaciones de Cabina</h1>
+                <p>Registro de eventos y peligros relacionados con operaciones de cabina de pasajeros</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Barra de progreso -->
+        <div class="progress-indicator">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="step-text">Paso 2 de 6: Detalle del Evento</div>
+        </div>
+
+        <!-- Formulario específico -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Tipo de Evento de Cabina</h2>
+                <p>Seleccione el tipo de evento que desea reportar</p>
+            </div>
+            <div class="card-body">
+                <div id="eventTypeError" class="alert alert-error" style="display: none;">
+                    <strong>Error:</strong> Debe seleccionar un tipo de evento antes de continuar.
+                </div>
+
+                <div class="area-selection">
+
+
+                    <div class="area-card" data-event="turbulence_cabin" title="Turbulencia">
+                        <div class="area-icon">༄</div>
+                        <div class="area-title">Turbulencia</div>
+                    </div>
+
+
+                     <div class="area-card" data-event="cabin_preparation" title="Eventos relacionados con la preparación de cabina de pax">
+                        <div class="area-icon">👩🏻‍✈️</div>
+                        <div class="area-title">Preparación de cabina de pax</div>
+                    </div>
+
+
+                    <div class="area-card" data-event="doors_process" title="Eventos relacionados con la apertura de puertas">
+                        <div class="area-icon">💺</div>
+                        <div class="area-title">Operación de puertas</div>
+                    </div>
+
+
+                    <div class="area-card" data-event="passenger_events" title="Eventos relacionados con pasajeros">
+                        <div class="area-icon">👥</div>
+                        <div class="area-title">Eventos con Pasajeros</div>
+                    </div>
+
+                    <div class="area-card" data-event="crew_fatigue" title="Fatiga en tripulantes de vuelo">
+                        <div class="area-icon">😴</div>
+                        <div class="area-title">Fatiga en Tripulantes de Vuelo</div>
+                    </div>
+
+                    <div class="area-card" data-event="cabin_equipment_failure" title="Fallas en equipos de cabina">
+                        <div class="area-icon">🛠️</div>
+                        <div class="area-title">Equipos de Cabina</div>
+                    </div>
+
+                    <div class="area-card" data-event="other" title="Otros eventos no especificados">
+                        <div class="area-icon">❓</div>
+                        <div class="area-title">Otro</div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- Card para detalle específico -->
+        <div class="card" id="subEventCard" style="display:none;">
+            <div class="card-header">
+                <h2>Detalle Específico</h2>
+                <p>Seleccione el detalle específico del evento</p>
+            </div>
+            <div class="card-body">
+                <div class="form-group full-width">
+                    <label for="subEventType">Detalle Específico <span class="required">*</span></label>
+                    <select id="subEventType" name="subEventType">
+                        <option value="">Seleccione...</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botón continuar -->
+        <div class="card">
+            <div class="card-body">
+                <div class="form-actions">
+                    <button type="button" class="btn" id="nextPageBtn" disabled>Continuar al Formulario Específico</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        class CabinEventForm {
+            constructor() {
+                this.selectedEventType = null;
+                this.selectedSubEvent = null;
+                this.init();
+            }
+
+            init() {
+                const progressFill = document.getElementById('progressFill');
+                if (progressFill) progressFill.style.width = '33.33%';
+
+                this.bindEvents();
+                this.setupSubEventOptions();
+                this.setupPageRoutes();
+            }
+
+            setupPageRoutes() {
+                // Mapeo de rutas para cada sub-evento específico
+                this.routes = {
+
+                    'turbulence_cabin': 'CBN/turbulence_cabin_form.html',   
+                    'cabin_preparation': 'CBN/cabin_preparation_form.html',
+                    'doors_process': 'CBN/door_operations.html',
+
+
+                    'sick_passenger': 'CBN/sick_passenger_form.html',
+                    'injured_passenger': 'CBN/sick_passenger_form.html',
+                    'dead_passenger': 'CBN/sick_passenger_form.html',
+                    'violent_passenger': 'CBN/violent_passenger_form.html',
+
+
+
+                    'scheduled_assignment': 'FLT/scheduled_assignment_form.html',
+                    'executed_assignment': 'FLT/executed_assignment_form.html',
+                    'other_fatigue': 'CBN/other_fatigue_form.html',
+
+                    
+                    'missing_equipment': 'CBN/missing_equipment_form.html',
+                    'defective_trolleys': 'CBN/defective_trolleys_form.html',
+                    'emergency_equipment': 'CBN/emergency_equipment_form.html',
+                    'other_equipment': 'CBN/other_equipment_form.html',
+                    'other_general': 'CBN/other_general_form.html',
+                    'other': 'title_desc.html', // Ruta directa para "Otro"
+                    'other_passenger_events': 'title_desc.html'
+                };
+            }
+
+            setupSubEventOptions() {
+                this.subOptions = {
+                    passenger_events: [
+                        {value:'sick_passenger', text:'Pasajero enfermo'},
+                         {value:'injured_passenger', text:'Pasajero lesionado'},
+                         {value:'dead_passenger', text:'Pasajero fallecido'},
+                        {value:'violent_passenger', text:'Pasajero disruptivo'},
+                        {value:'other_passenger_events', text:'Otro'},
+                    ],
+                    crew_fatigue: [
+                        {value:'scheduled_assignment', text:'Asignación programada'},
+                        {value:'executed_assignment', text:'Asignación Ejecutada'},
+                        {value:'other_fatigue', text:'Otro'}
+                    ],
+                    cabin_equipment_failure: [
+                        {value:'missing_equipment', text:'Falta de ipads/powerbanks (equipos para el servicio)'},
+                        {value:'defective_trolleys', text:'Trolleys defectuosos/mal ubicados'},
+                        {value:'emergency_equipment', text:'Falla o falta de equipos de emergencia'},
+                        {value:'other_equipment', text:'Otro'}
+                    ]
+                    // Removido 'other' de aquí para evitar mostrar la lista desplegable
+                };
+            }
+
+            bindEvents() {
+                document.querySelectorAll('.area-card[data-event]').forEach(card => {
+                    card.addEventListener('click', () => this.selectEventType(card));
+                });
+
+                const subSelect = document.getElementById('subEventType');
+                if (subSelect) {
+                    subSelect.addEventListener('change', () => {
+                        this.selectedSubEvent = subSelect.value || null;
+                        this.validateForm();
+                    });
+                }
+
+                const nextBtn = document.getElementById('nextPageBtn');
+                if (nextBtn) {
+                    nextBtn.addEventListener('click', () => this.navigateToSpecificForm());
+                }
+            }
+
+            selectEventType(selectedCard) {
+                document.querySelectorAll('.area-card[data-event]').forEach(card => {
+                    card.classList.remove('selected');
+                });
+
+                selectedCard.classList.add('selected');
+                this.selectedEventType = selectedCard.dataset.event;
+                this.selectedSubEvent = null;
+
+                const eventTypeError = document.getElementById('eventTypeError');
+                if (eventTypeError) eventTypeError.style.display = 'none';
+
+                // Si se selecciona "Otro", redirigir directamente
+                if (this.selectedEventType === 'other') {
+                    this.navigateDirectlyToOther();
+                    return;
+                }
+
+                this.showSubEventCard();
+
+                setTimeout(() => {
+                    const subEventCard = document.getElementById('subEventCard');
+                    if (subEventCard && subEventCard.style.display !== 'none') {
+                        subEventCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }, 150);
+
+                this.validateForm();
+            }
+
+            navigateDirectlyToOther() {
+                // Guardar datos en sessionStorage
+                const data = {
+                    cabinEventType: 'other',
+                    subEventType: 'other',
+                    timestamp: new Date().toISOString()
+                };
+                sessionStorage.setItem('cabinEventData', JSON.stringify(data));
+
+                // Redirigir inmediatamente a other.html
+                window.location.href = 'title_desc.html';
+            }
+
+            showSubEventCard() {
+                const subEventCard = document.getElementById('subEventCard');
+                const subSelect = document.getElementById('subEventType');
+
+                if (this.subOptions[this.selectedEventType]) {
+                    subSelect.innerHTML = '<option value="">Seleccione...</option>';
+
+                    this.subOptions[this.selectedEventType].forEach(option => {
+                        const optionElement = document.createElement('option');
+                        optionElement.value = option.value;
+                        optionElement.text = option.text;
+                        subSelect.appendChild(optionElement);
+                    });
+
+                    subEventCard.style.display = 'block';
+                    subSelect.required = true;
+                } else {
+                    subEventCard.style.display = 'none';
+                    subSelect.required = false;
+                }
+
+                this.selectedSubEvent = null;
+                subSelect.value = '';
+            }
+
+            validateForm() {
+                const nextBtn = document.getElementById('nextPageBtn');
+                let isValid = true;
+
+                if (!this.selectedEventType) {
+                    isValid = false;
+                } else if (this.subOptions[this.selectedEventType]) {
+                    if (!this.selectedSubEvent || this.selectedSubEvent === '') isValid = false;
+                }
+
+                if (nextBtn) nextBtn.disabled = !isValid;
+                return isValid;
+            }
+
+            navigateToSpecificForm() {
+                if (!this.validateForm()) return;
+
+                // Guardar datos en sessionStorage
+                const data = {
+                    cabinEventType: this.selectedEventType,
+                    subEventType: this.selectedSubEvent || this.selectedEventType,
+                    timestamp: new Date().toISOString()
+                };
+                sessionStorage.setItem('cabinEventData', JSON.stringify(data));
+
+                // Navegar a la página específica
+                const targetPage = this.routes[this.selectedSubEvent] || this.routes[this.selectedEventType] || 'general_form.html';
+                window.location.href = targetPage;
+            }
+        }
+
+        // Inicializar cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', () => {
+            const formInstance = new CabinEventForm();
+            window.cabinEventForm = formInstance;
+        });
+    </script>
+</body>
+</html>

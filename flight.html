@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario Específico - Operaciones de Vuelo</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">✈</div>
+            <div>
+                <h1>Formulario Específico - Operaciones de Vuelo</h1>
+                <p>Registro de eventos y peligros relacionados con operaciones de vuelo</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Barra de progreso -->
+        <div class="progress-indicator">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="step-text">Paso 2 de 6: Detalle del Evento</div>
+        </div>
+
+        <!-- Formulario específico -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Tipo de Evento de Vuelo</h2>
+                <p>Seleccione el tipo de evento que desea reportar</p>
+            </div>
+            <div class="card-body">
+                <div id="eventTypeError" class="alert alert-error" style="display: none;">
+                    <strong>Error:</strong> Debe seleccionar un tipo de evento antes de continuar.
+                </div>
+
+                <div class="area-selection">
+                    <div class="area-card" data-event="tcas_gpws" title="Alertas de proximidad, tráfico aéreo y terreno">
+                        <div class="area-icon">⚠️</div>
+                        <div class="area-title">Advertencias TCAS/GPWS</div>
+                    </div>
+
+                    <div class="area-card" data-event="unstable_approach" title="Aproximación inestable o sobrepaso">
+                        <div class="area-icon">🛬</div>
+                        <div class="area-title">Aproximación y Contacto Anormal con la Pista</div>
+                    </div>
+
+                    <div class="area-card" data-event="adverse_weather" title="Condiciones meteorológicas adversas">
+                        <div class="area-icon">🌩️</div>
+                        <div class="area-title">Condiciones Meteorológicas</div>
+                    </div>
+
+                    <div class="area-card" data-event="bird_strike" title="Bird strikes durante operaciones">
+                        <div class="area-icon">🐦</div>
+                        <div class="area-title">Impacto con Aves</div>
+                    </div>
+
+                    <div class="area-card" data-event="crew_fatigue" title="Eventos relacionados con fatiga operacional">
+                        <div class="area-icon">😴</div>
+                        <div class="area-title">Fatiga de Tripulación</div>
+                    </div>
+
+                    <div class="area-card" data-event="technical_failure" title="Fallas técnicas de la aeronave">
+                        <div class="area-icon">🔧</div>
+                        <div class="area-title">Falla Técnica</div>
+                    </div>
+
+                    <div class="area-card" data-event="runway_incursion" title="Incursión en pista/calle de rodaje">
+                        <div class="area-icon">🚨</div>
+                        <div class="area-title">Incursión en Pista</div>
+                    </div>
+
+                    <div class="area-card" data-event="other" title="Otros eventos no especificados">
+                        <div class="area-icon">❓</div>
+                        <div class="area-title">Otro</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card para detalle específico -->
+        <div class="card" id="subEventCard" style="display:none;">
+            <div class="card-header">
+                <h2>Detalle Específico</h2>
+                <p>Seleccione el detalle específico del evento</p>
+            </div>
+            <div class="card-body">
+                <div class="form-group full-width">
+                    <label for="subEventType">Detalle Específico <span class="required">*</span></label>
+                    <select id="subEventType" name="subEventType">
+                        <option value="">Seleccione...</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botón continuar -->
+        <div class="card">
+            <div class="card-body">
+                <div class="form-actions">
+                    <button type="button" class="btn" id="nextPageBtn" disabled>Continuar al Formulario Específico</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        class FlightEventForm {
+            constructor() {
+                this.selectedEventType = null;
+                this.selectedSubEvent = null;
+                this.init();
+            }
+
+            init() {
+                const progressFill = document.getElementById('progressFill');
+                if (progressFill) progressFill.style.width = '33.33%';
+
+                this.bindEvents();
+                this.setupSubEventOptions();
+                this.setupPageRoutes();
+            }
+
+            setupPageRoutes() {
+                this.routes = {
+                    'tcas_ta': 'title_desc.html',
+                    'tcas_ra': 'FLT/tcas_ra_form.html',
+                    'gpws': 'FLT/gpws_form.html',
+                    'other_tcas': 'title_desc.html',
+
+                    'unstable_landing': 'FLT/unstable_landing_form.html',
+                    'goaround': 'FLT/goaround_form.html',
+                    'abnormal_contact': 'FLT/abnormal_contact_form.html',
+
+                    'turbulence': 'FLT/turbulence_form.html',
+                    'storm': 'title_desc.html',
+                    'hail': 'title_desc.html',
+                    'windshear': 'FLT/windshear_form.html',
+                    'low_visibility': 'title_desc.html',
+                    'other_weather': 'title_desc.html',
+
+                    'bird_strike': 'FLT/bird_strike_form.html',
+
+                    'scheduled_assignment': 'FLT/scheduled_assignment_form.html',
+                    'executed_assignment': 'FLT/executed_assignment_form.html',
+                    'other_fatigue': 'FLT/scheduled_assignment_form.html',
+
+                    'technical_failure': 'MNT/procedure_form.html',
+                    'other_technical': 'title_desc.html',
+
+                    'runway_incursion': 'FLT/runway_incursion_form.html',
+                    'other_general': 'title_desc.html',
+                };
+            }
+
+            setupSubEventOptions() {
+                this.subOptions = {
+                    tcas_gpws: [
+                        {value:'tcas_ta', text:'Alerta de tráfico (TCAS TA)'},
+                        {value:'tcas_ra', text:'Alerta de resolución (TCAS RA)'},
+                        {value:'gpws', text:'Alerta de proximidad al terreno (GPWS)'},
+                        {value:'other_tcas', text:'Otro'}
+                    ],
+
+                    unstable_approach: [
+                        {value:'unstable_landing', text:'Aproximación inestable con Aterrizaje'},
+                        {value:'goaround', text:'Sobrepaso'},
+                        {value:'abnormal_contact', text:'Contacto Anormal con la Pista'}
+                    ],
+
+                    adverse_weather: [
+                        {value:'turbulence', text:'Turbulencia'},
+                        {value:'storm', text:'Tormenta (lluvia, truenos o actividad eléctrica)'},
+                        {value:'hail', text:'Granizo'},
+                        {value:'windshear', text:'Cizalladura de viento - Windshear'},
+                        {value:'low_visibility', text:'Reducción de visibilidad (niebla, polvo, etc)'},
+                        {value:'other_weather', text:'Otro'}
+                    ],
+                    
+                    crew_fatigue: [
+                        {value:'scheduled_assignment', text:'Asignación programada'},
+                        {value:'executed_assignment', text:'Asignación Ejecutada'},
+                        {value:'other_fatigue', text:'Otro'}
+                    ]
+                };
+            }
+
+            bindEvents() {
+                document.querySelectorAll('.area-card[data-event]').forEach(card => {
+                    card.addEventListener('click', () => this.selectEventType(card));
+                });
+
+                const subSelect = document.getElementById('subEventType');
+                if (subSelect) {
+                    subSelect.addEventListener('change', () => {
+                        this.selectedSubEvent = subSelect.value || null;
+                        this.validateForm();
+                    });
+                }
+
+                const nextBtn = document.getElementById('nextPageBtn');
+                if (nextBtn) {
+                    nextBtn.addEventListener('click', () => this.navigateToSpecificForm());
+                }
+            }
+
+            selectEventType(selectedCard) {
+                document.querySelectorAll('.area-card[data-event]').forEach(card => {
+                    card.classList.remove('selected');
+                });
+
+                selectedCard.classList.add('selected');
+                this.selectedEventType = selectedCard.dataset.event;
+                this.selectedSubEvent = null;
+
+                const eventTypeError = document.getElementById('eventTypeError');
+                if (eventTypeError) eventTypeError.style.display = 'none';
+
+                if (this.selectedEventType === 'other') {
+                    this.navigateDirectlyToOther();
+                    return;
+                }
+
+                this.showSubEventCard();
+
+                setTimeout(() => {
+                    const subEventCard = document.getElementById('subEventCard');
+                    if (subEventCard && subEventCard.style.display !== 'none') {
+                        subEventCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }, 150);
+
+                this.validateForm();
+            }
+
+            navigateDirectlyToOther() {
+                const data = {
+                    flightEventType: 'other',
+                    subEventType: 'other',
+                    timestamp: new Date().toISOString()
+                };
+                sessionStorage.setItem('flightEventData', JSON.stringify(data));
+                window.location.href = 'title_desc.html';
+            }
+
+            showSubEventCard() {
+                const subEventCard = document.getElementById('subEventCard');
+                const subSelect = document.getElementById('subEventType');
+
+                if (this.subOptions[this.selectedEventType]) {
+                    subSelect.innerHTML = '<option value="">Seleccione...</option>';
+                    this.subOptions[this.selectedEventType].forEach(option => {
+                        const optionElement = document.createElement('option');
+                        optionElement.value = option.value;
+                        optionElement.text = option.text;
+                        subSelect.appendChild(optionElement);
+                    });
+                    subEventCard.style.display = 'block';
+                    subSelect.required = true;
+                } else {
+                    // <<---- Ajuste clave: no hay submenú, ocultar tarjeta y habilitar botón
+                    subEventCard.style.display = 'none';
+                    subSelect.required = false;
+                    this.selectedSubEvent = null;
+                    this.validateForm();              // habilita el botón al no requerirse subopción
+                }
+
+                subSelect.value = '';
+            }
+
+            validateForm() {
+                const nextBtn = document.getElementById('nextPageBtn');
+                let isValid = true;
+
+                if (!this.selectedEventType) {
+                    isValid = false;
+                } else if (this.subOptions[this.selectedEventType]) {
+                    if (!this.selectedSubEvent || this.selectedSubEvent === '') isValid = false;
+                }
+
+                if (nextBtn) nextBtn.disabled = !isValid;
+                return isValid;
+            }
+
+            navigateToSpecificForm() {
+                if (!this.validateForm()) return;
+
+                const data = {
+                    flightEventType: this.selectedEventType,
+                    subEventType: this.selectedSubEvent || this.selectedEventType,
+                    timestamp: new Date().toISOString()
+                };
+                sessionStorage.setItem('flightEventData', JSON.stringify(data));
+
+                const targetPage = this.routes[this.selectedSubEvent] || this.routes[this.selectedEventType] || 'general_form.html';
+                window.location.href = targetPage;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const formInstance = new FlightEventForm();
+            window.flightEventForm = formInstance;
+        });
+    </script>
+</body>
+</html>

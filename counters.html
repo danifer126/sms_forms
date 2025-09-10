@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Formulario Específico - Salas de Abordaje / Counters</title>
+    <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+<header class="header">
+    <div class="header-content">
+        <div class="logo">🏢</div>
+        <div>
+            <h1>Formulario Específico - Salas de Abordaje / Counters</h1>
+            <p>Registro de eventos y peligros ocurridos en áreas de abordaje y counters</p>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <!-- Barra de progreso -->
+    <div class="progress-indicator">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="step-text">Paso 2 de 6: Detalle del Evento</div>
+    </div>
+
+    <!-- Selección de tipo de evento -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Tipo de Evento en Salas de Abordaje / Counters</h2>
+            <p>Seleccione el tipo de evento que desea reportar</p>
+        </div>
+        <div class="card-body">
+            <div id="eventTypeError" class="alert alert-error" style="display:none;">
+                <strong>Error:</strong> Debe seleccionar el detalle específico cuando aplica.
+            </div>
+
+            <div class="area-selection">
+                <div class="area-card" data-event="passenger_event" title="Eventos relacionados con pasajeros" tabindex="0" role="button" aria-pressed="false">
+                    <div class="area-icon">👥</div>
+                    <div class="area-title">Eventos con Pasajeros</div>
+                </div>
+
+                <div class="area-card" data-event="dgs_event" title="Mercancías peligrosas" tabindex="0" role="button" aria-pressed="false">
+                    <div class="area-icon">⚠️</div>
+                    <div class="area-title">Mercancías Peligrosas</div>
+                </div>
+
+                <div class="area-card" data-event="other" title="Otros eventos no especificados" tabindex="0" role="button" aria-pressed="false">
+                    <div class="area-icon">❓</div>
+                    <div class="area-title">Otro</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card para detalle específico (se muestra solo si hay sub-opciones) -->
+    <div class="card" id="subEventCard" style="display:none;">
+        <div class="card-header">
+            <h2>Detalle Específico</h2>
+            <p>Seleccione el detalle específico del evento</p>
+        </div>
+        <div class="card-body">
+            <div class="form-group full-width">
+                <label for="subEventType">Detalle Específico <span class="required">*</span></label>
+                <select id="subEventType" name="subEventType" aria-label="Detalle específico">
+                    <option value="">Seleccione...</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón continuar -->
+    <div class="card">
+        <div class="card-body">
+            <div class="form-actions">
+                <button type="button" class="btn" id="nextPageBtn" disabled>
+                    Continuar al Formulario Específico
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+class ATOSForm {
+    constructor() {
+        this.selectedEventType = null;
+        this.selectedSubEvent = null;
+        this.routes = {};
+        this.subOptions = {};
+        this.init();
+    }
+
+    init() {
+        const progressFill = document.getElementById('progressFill');
+        if (progressFill) progressFill.style.width = '33.33%';
+
+        this.setupSubEventOptions();
+        this.setupPageRoutes();
+        this.bindEvents();
+    }
+
+    setupPageRoutes() {
+        // Rutas por evento y (opcional) por sub-evento
+        this.routes = {
+            // Evento principal
+            'passenger_event': 'ATOS/passenger_event_form.html',
+            'dgs_event': 'CGO/dangerous_goods_form.html',
+            'other': 'title_desc.html', // Atajo para "Otro"
+
+            // Sub-eventos (si quieres ruteo más específico)
+             'sick_passenger': 'CBN/sick_passenger_form.html',
+                    'injured_passenger': 'CBN/sick_passenger_form.html',
+                    'dead_passenger': 'CBN/sick_passenger_form.html',
+                    'violent_passenger': 'CBN/violent_passenger_form.html'
+
+
+
+
+
+        };
+    }
+
+    setupSubEventOptions() {
+        this.subOptions = {
+            passenger_event: [
+                          {value:'sick_passenger', text:'Pasajero enfermo'},
+                         {value:'injured_passenger', text:'Pasajero lesionado'},
+                         {value:'dead_passenger', text:'Pasajero fallecido'},
+                        {value:'violent_passenger', text:'Pasajero disruptivo'},
+                        {value:'other_passenger_events', text:'Otro'}
+            ]
+            // Nota: "other" no tiene sub-opciones; se maneja como atajo
+        };
+    }
+
+    bindEvents() {
+        // Click con mouse
+        document.querySelectorAll('.area-card[data-event]').forEach(card => {
+            card.addEventListener('click', () => this.selectEventType(card));
+        });
+
+        // Accesibilidad por teclado (Enter/Espacio)
+        document.querySelectorAll('.area-card[data-event]').forEach(card => {
+            card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.selectEventType(card);
+                }
+            });
+        });
+
+        const subSelect = document.getElementById('subEventType');
+        if (subSelect) {
+            subSelect.addEventListener('change', () => {
+                this.selectedSubEvent = subSelect.value || null;
+                this.validateForm();
+            });
+        }
+
+        const nextBtn = document.getElementById('nextPageBtn');
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => this.navigateToSpecificForm());
+        }
+    }
+
+    selectEventType(selectedCard) {
+        // UI de selección
+        document.querySelectorAll('.area-card[data-event]').forEach(card => {
+            card.classList.remove('selected');
+            card.setAttribute('aria-pressed', 'false');
+        });
+        selectedCard.classList.add('selected');
+        selectedCard.setAttribute('aria-pressed', 'true');
+
+        // Estado
+        this.selectedEventType = selectedCard.dataset.event;
+        this.selectedSubEvent = null;
+
+        // Oculta error si estaba visible
+        const eventTypeError = document.getElementById('eventTypeError');
+        if (eventTypeError) eventTypeError.style.display = 'none';
+
+        // Si es "Otro", salto directo
+        if (this.selectedEventType === 'other') {
+            this.navigateToSpecificForm();
+            return;
+        }
+
+        // Muestra/oculta el select según haya sub-opciones
+        this.showSubEventCard();
+    }
+
+    showSubEventCard() {
+        const subEventCard = document.getElementById('subEventCard');
+        const subSelect = document.getElementById('subEventType');
+        if (!this.selectedEventType || !subEventCard || !subSelect) return;
+
+        const options = this.subOptions[this.selectedEventType];
+
+        if (Array.isArray(options) && options.length > 0) {
+            // Mostrar tarjeta y poblar opciones
+            subEventCard.style.display = 'block';
+            subSelect.required = true;
+
+            subSelect.innerHTML = '<option value="">Seleccione...</option>';
+            options.forEach(opt => {
+                const optionEl = document.createElement('option');
+                optionEl.value = opt.value;
+                optionEl.text = opt.text;
+                subSelect.appendChild(optionEl);
+            });
+
+            // Reset selección
+            this.selectedSubEvent = null;
+            subSelect.value = '';
+        } else {
+            // No hay sub-opciones: ocultar tarjeta y limpiar
+            subEventCard.style.display = 'none';
+            subSelect.required = false;
+            subSelect.innerHTML = '<option value="">Seleccione...</option>';
+            this.selectedSubEvent = null;
+        }
+
+        this.validateForm();
+
+        // Desplazar suavemente si quedó visible
+        setTimeout(() => {
+            if (subEventCard.style.display !== 'none') {
+                subEventCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }, 120);
+    }
+
+    validateForm() {
+        const nextBtn = document.getElementById('nextPageBtn');
+        const hasEvent = !!this.selectedEventType;
+
+        const hasSubOptions =
+            Array.isArray(this.subOptions[this.selectedEventType]) &&
+            this.subOptions[this.selectedEventType].length > 0;
+
+        const hasSubSelected = !!this.selectedSubEvent;
+
+        const isValid = hasEvent && (!hasSubOptions || hasSubSelected);
+
+        if (nextBtn) nextBtn.disabled = !isValid;
+
+        return isValid;
+    }
+
+    navigateToSpecificForm() {
+        // Trato especial para "Otro": salto directo y guardado
+        if (this.selectedEventType === 'other') {
+            const dataOther = {
+                areaEventType: 'other',
+                subEventType: 'other',
+                timestamp: new Date().toISOString()
+            };
+            sessionStorage.setItem('atosEventData', JSON.stringify(dataOther));
+            const urlOther = this.routes['other'] || 'title_desc.html';
+            window.location.href = urlOther;
+            return;
+        }
+
+        // Validación condicional
+        if (!this.validateForm()) {
+            const eventTypeError = document.getElementById('eventTypeError');
+            if (eventTypeError) eventTypeError.style.display = 'block';
+            return;
+        }
+
+        // Persistir selección
+        const data = {
+            areaEventType: this.selectedEventType,
+            subEventType: this.selectedSubEvent || null,
+            timestamp: new Date().toISOString()
+        };
+        sessionStorage.setItem('atosEventData', JSON.stringify(data));
+
+        // Ruteo con fallback: sub-evento -> evento -> general
+        const key = this.selectedSubEvent || this.selectedEventType;
+        const url = this.routes[key] || this.routes[this.selectedEventType] || 'general_form.html';
+        window.location.href = url;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    new ATOSForm();
+});
+</script>
+</body>
+</html>

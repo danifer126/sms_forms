@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario Fatiga Tripulación - Asignación Ejecutada</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">✈</div>
+            <div>
+                <h1>Fatiga de la Tripulación - Asignación Ejecutada</h1>
+                <p>Registro detallado de fatiga durante asignación ejecutada</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Barra de progreso -->
+        <div class="progress-indicator">
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 50%;"></div>
+            </div>
+            <div class="step-text">Paso 3 de 6: Información Específica - Fatiga de la Tripulación</div>
+        </div>
+
+        <form id="executedAssignmentForm">
+            <!-- Información de la Asignación -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Información de la Asignación</h2>
+                    <p>Detalles sobre el horario de la asignación ejecutada</p>
+                </div>
+                <div class="card-body">
+                    <div class="form-group full-width">
+                        <label for="startTime">¿A qué hora local inició la asignación que está reportando? <span class="required">*</span></label>
+                        <input type="time" id="startTime" name="startTime" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nivel de Alerta -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Nivel de Alerta</h2>
+                    <p>Evalúe su nivel de alerta percibido durante la asignación</p>
+                </div>
+                <div class="card-body">
+                    <div class="form-group full-width">
+                        <label for="alertLevel">Nivel de alerta percibido en la asignación reportada <span class="required">*</span></label>
+                        <select id="alertLevel" name="alertLevel" required>
+                            <option value="">Seleccione...</option>
+                            <option value="1">1 - Extremadamente alerta</option>
+                            <option value="2">2 - Muy alerta</option>
+                            <option value="3">3 - Alerta</option>
+                            <option value="4">4 - Moderadamente alerta</option>
+                            <option value="5">5 - Ni alerta ni somnoliento</option>
+                            <option value="6">6 - Algunos signos de somnolencia</option>
+                            <option value="7">7 - Somnoliento, pero sin esfuerzo para mantenerse alerta</option>
+                            <option value="8">8 - Somnoliento, con esfuerzo para mantenerse alerta</option>
+                            <option value="9">9 - Muy somnoliento, gran esfuerzo para mantenerse alerta, luchando contra el sueño</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Información del Descanso -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Información del Descanso Previo</h2>
+                    <p>Detalles sobre el descanso antes de la asignación</p>
+                </div>
+                <div class="card-body">
+                    <div class="form-group full-width">
+                        <label for="napDuration">Si antes de iniciar la asignación tomó una siesta ¿Cuánto tiempo duró esta siesta?</label>
+                        <select id="napDuration" name="napDuration">
+                            <option value="">Seleccione...</option>
+                            <option value="sin_siesta">Sin siesta</option>
+                            <option value="15_20_min">15 a 20 min</option>
+                            <option value="30_40_min">30 a 40 min</option>
+                            <option value="1_hora">1 hora</option>
+                            <option value="2_horas">2 horas</option>
+                            <option value="mas_2_horas">Más de 2 horas</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Horarios de Sueño -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Horarios de Sueño</h2>
+                    <p>Información sobre sus horarios de sueño previos a la asignación</p>
+                </div>
+                <div class="card-body">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="bedTime">El día anterior a la asignación ¿A qué hora se durmió aproximadamente? <span class="required">*</span></label>
+                            <input type="time" id="bedTime" name="bedTime" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="wakeTime">El día de la asignación ¿A qué hora se despertó aproximadamente? <span class="required">*</span></label>
+                            <input type="time" id="wakeTime" name="wakeTime" required>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="sleepTwoDaysAgo">¿Cuántas horas durmió aproximadamente dos días antes de la asignación (hace dos días)? <span class="required">*</span></label>
+                            <select id="sleepTwoDaysAgo" name="sleepTwoDaysAgo" required>
+                                <option value="">Seleccione...</option>
+                                <option value="menos_3_hrs">Menos de 3 hrs</option>
+                                <option value="3_hrs">3 hrs</option>
+                                <option value="4_hrs">4 hrs</option>
+                                <option value="5_hrs">5 hrs</option>
+                                <option value="6_hrs">6 hrs</option>
+                                <option value="7_hrs">7 hrs</option>
+                                <option value="8_hrs">8 hrs</option>
+                                <option value="9_hrs">9 hrs</option>
+                                <option value="10_hrs">10 hrs</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="sleepThreeDaysAgo">¿Cuántas horas durmió aproximadamente tres días antes de la asignación (hace tres días)? <span class="required">*</span></label>
+                            <select id="sleepThreeDaysAgo" name="sleepThreeDaysAgo" required>
+                                <option value="">Seleccione...</option>
+                                <option value="menos_3_hrs">Menos de 3 hrs</option>
+                                <option value="3_hrs">3 hrs</option>
+                                <option value="4_hrs">4 hrs</option>
+                                <option value="5_hrs">5 hrs</option>
+                                <option value="6_hrs">6 hrs</option>
+                                <option value="7_hrs">7 hrs</option>
+                                <option value="8_hrs">8 hrs</option>
+                                <option value="9_hrs">9 hrs</option>
+                                <option value="10_hrs">10 hrs</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Información Adicional de Salud -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Información Adicional</h2>
+                    <p>Situaciones personales o de salud que puedan afectar el desempeño</p>
+                </div>
+                <div class="card-body">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="healthSituation">¿Actualmente tiene alguna situación personal o de salud que pueda afectar tu desempeño y horas de sueño? <span class="required">*</span></label>
+                            <select id="healthSituation" name="healthSituation" required>
+                                <option value="">Seleccione...</option>
+                                <option value="si">Sí</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="wantsContact">¿Desea ser contactado por el equipo de salud? <span class="required">*</span></label>
+                            <select id="wantsContact" name="wantsContact" required>
+                                <option value="">Seleccione...</option>
+                                <option value="si">Sí</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botones de navegación -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-actions">
+                        <button type="button" class="btn" onclick="history.back()" style="background: var(--text-gray);">Regresar</button>
+                        <button type="submit" class="btn">Continuar a Descripción del Evento</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedData = sessionStorage.getItem('flightEventData');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                console.log('Datos cargados para Fatiga de Tripulación - Asignación Ejecutada:', data);
+            }
+
+            document.getElementById('executedAssignmentForm').addEventListener('submit', handleFormSubmit);
+        });
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+
+            const formData = new FormData(e.target);
+            const executedAssignmentData = {};
+            
+            for (let [key, value] of formData.entries()) {
+                executedAssignmentData[key] = value;
+            }
+
+            const existingData = JSON.parse(sessionStorage.getItem('flightEventData') || '{}');
+            const combinedData = { ...existingData, executedAssignmentDetails: executedAssignmentData };
+            
+            sessionStorage.setItem('flightEventData', JSON.stringify(combinedData));
+            window.location.href = '../title_desc.html';
+        }
+    </script>
+</body>
+</html>

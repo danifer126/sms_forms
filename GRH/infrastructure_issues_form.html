@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario infraestructura aeroportuaria</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">📋</div>
+            <div>
+                <h1>Infraestructura Aeroportuaria</h1>
+                <p>Registro detallado de eventos relacionados con la infraestrucutra de los aeropuertos</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Barra de progreso -->
+        <div class="progress-indicator">
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 60%;"></div>
+            </div>
+            <div class="step-text">Paso 3 de 5: Información Específica - Mercancías Peligrosas</div>
+        </div>
+
+        <form id="dangerousGoodsForm">
+            <!-- Información de Mercancías Peligrosas -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Información de Mercancías Peligrosas</h2>
+                    <p>Complete los detalles específicos del evento con mercancías peligrosas</p>
+                </div>
+                <div class="card-body">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="declaredGoods">¿En que lugar se presento el evento u observo el peligro? <span class="required">*</span></label>
+                            <select id="declaredGoods" name="declaredGoods" required>
+                                <option value="">Seleccione...</option>
+                                <option value="taxi_way">Calle de rodaje</option>
+                                <option value="Ramp">Rampa</option>
+                                <option value="Runway">Pista de aterrizaje</option>
+                                <option value="Other">Otro</option>
+                            </select>   
+                        </div>
+
+                        <div class="form-group">
+                            <label for="eventType">¿Qué tipo de peligro observó? <span class="required">*</span></label>
+                            <select id="eventType" name="eventType" required>
+                                <option value="">Seleccione...</option>
+                                <option value="asegurada_incorrectamente">Iluminación en mal estado - inadecuada </option>
+                                <option value="error_documentacion">Señalización en mal estado - inadecuada</option>
+                                <option value="mercancia_oculta">Señalización en mal estado - inadecuada</option>
+                                <option value="sobrevuelo">Radio ayudas en mal estado</option>
+                                <option value="sobrecalentamiento">Otro</option>
+                            </select>
+                        </div>
+                    </div>                 
+                </div>
+            </div>
+
+            <!-- Botones de navegación -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-actions">
+                        <button type="button" class="btn" onclick="history.back()" style="background: var(--text-gray);">Regresar</button>
+                        <button type="submit" class="btn">Continuar a Información de Vuelo</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedData = sessionStorage.getItem('dispatchEventData');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                console.log('Datos cargados para Mercancías Peligrosas:', data);
+            }
+
+            // Evita error si no existen estos elementos en el DOM
+            const eventLocationEl = document.getElementById('eventLocation');
+            const aircraftGroup = document.getElementById('aircraftLocationGroup');
+            const warehouseGroup = document.getElementById('warehouseLocationGroup');
+
+            if (eventLocationEl && aircraftGroup && warehouseGroup) {
+                eventLocationEl.addEventListener('change', function() {
+                    aircraftGroup.style.display = 'none';
+                    warehouseGroup.style.display = 'none';
+
+                    if (this.value === 'aeronave') {
+                        aircraftGroup.style.display = 'block';
+                    } else if (this.value === 'bodegas') {
+                        warehouseGroup.style.display = 'block';
+                    }
+                });
+            }
+
+            // Ahora sí se registra el submit
+            document.getElementById('dangerousGoodsForm').addEventListener('submit', handleFormSubmit);
+
+            function handleFormSubmit(e) {
+                e.preventDefault();
+
+                const formData = new FormData(e.target);
+                const dangerousGoodsData = {};
+                
+                for (let [key, value] of formData.entries()) {
+                    dangerousGoodsData[key] = value;
+                }
+
+                const existingData = JSON.parse(sessionStorage.getItem('dispatchEventData') || '{}');
+                const combinedData = { ...existingData, dangerousGoodsDetails: dangerousGoodsData };
+                
+                sessionStorage.setItem('dispatchEventData', JSON.stringify(combinedData));
+                window.location.href = '../title_desc.html';
+            }
+        });
+    </script>
+</body>
+</html>

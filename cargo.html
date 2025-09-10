@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario Específico - Cargo</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">📦</div>
+            <div>
+                <h1>Formulario Específico - Cargo</h1>
+                <p>Registro de eventos relacionados con operaciones de manejo de carga</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Barra de progreso -->
+        <div class="progress-indicator">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="step-text">Paso 2 de 6: Detalle del Evento</div>
+        </div>
+
+        <!-- Selección de tipo de evento -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Tipo de Evento de Cargo</h2>
+                <p>Seleccione el tipo de evento que desea reportar</p>
+            </div>
+            <div class="card-body">
+                <div id="eventTypeError" class="alert alert-error" style="display: none;">
+                    <strong>Error:</strong> Debe seleccionar un tipo de evento antes de continuar.
+                </div>
+
+                <div class="area-selection">
+                    <div class="area-card" data-event="cargo_discrepancy" title="Discrepancias en documentación, peso, cantidad o estado de la carga">
+                        <div class="area-icon">📋</div>
+                        <div class="area-title">Discrepancias de Carga</div>
+                    </div>
+
+                    <div class="area-card" data-event="cargo_handling" title="Manejo inadecuado de carga y equipaje">
+                        <div class="area-icon">🧳</div>
+                        <div class="area-title">Manejo de Carga y Equipaje</div>
+                    </div>
+
+                    <div class="area-card" data-event="dangerous_goods" title="Mercancias peligrosas">
+                        <div class="area-icon">⚠️</div>
+                        <div class="area-title">Mercacías Peligrosas</div>
+                    </div>
+
+                    <div class="area-card" data-event="other" title="Otros eventos no especificados relacionados con cargo">
+                        <div class="area-icon">❓</div>
+                        <div class="area-title">Otro</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        <!-- Card para detalle específico (alineado al patrón flight; quedará oculta porque no hay subOptions) -->
+        <div class="card" id="subEventCard" style="display:none;">
+            <div class="card-header">
+                <h2>Detalle Específico</h2>
+                <p>Seleccione el detalle específico del evento</p>
+            </div>
+            <div class="card-body">
+                <div class="form-group full-width">
+                    <label for="subEventType">Detalle Específico <span class="required">*</span></label>
+                    <select id="subEventType" name="subEventType">
+                        <option value="">Seleccione...</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botón continuar -->
+        <div class="card">
+            <div class="card-body">
+                <div class="form-actions">
+                    <button type="button" class="btn" id="nextPageBtn" disabled>Continuar al Formulario Específico</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        class CargoEventForm {
+            constructor() {
+                this.selectedEventType = null;
+                this.selectedSubEvent = null;
+                this.init();
+            }
+
+            init() {
+                const progressFill = document.getElementById('progressFill');
+                if (progressFill) progressFill.style.width = '33.33%';
+
+                this.bindEvents();
+                this.setupSubEventOptions();
+                this.setupPageRoutes();
+            }
+
+            setupPageRoutes() {
+                // Rutas pendientes (placeholder): apuntan a title_desc.html
+                this.routes = {
+                    cargo_discrepancy: 'GRH/cargo_discrepancies_form.html',
+                    cargo_handling: 'GRH/cargo_handling_form.html',
+                    dangerous_goods: 'CGO/dangerous_goods_form.html',
+                    other: 'title_desc.html'
+                };
+            }
+
+            setupSubEventOptions() {
+                // No añadimos subcategorías nuevas (se mantiene igual que cargo original).
+                // Al no haber opciones, el botón se habilita al elegir la categoría.
+                this.subOptions = {
+                    // intencionalmente vacío para todas las categorías
+                };
+            }
+
+            bindEvents() {
+                document.querySelectorAll('.area-card[data-event]').forEach(card => {
+                    card.addEventListener('click', () => this.selectEventType(card));
+                });
+
+                const subSelect = document.getElementById('subEventType');
+                if (subSelect) {
+                    subSelect.addEventListener('change', () => {
+                        this.selectedSubEvent = subSelect.value || null;
+                        this.validateForm();
+                    });
+                }
+
+                const nextBtn = document.getElementById('nextPageBtn');
+                if (nextBtn) {
+                    nextBtn.addEventListener('click', () => this.navigateToSpecificForm());
+                }
+            }
+
+            selectEventType(selectedCard) {
+                document.querySelectorAll('.area-card[data-event]').forEach(card => {
+                    card.classList.remove('selected');
+                });
+
+                selectedCard.classList.add('selected');
+                this.selectedEventType = selectedCard.dataset.event;
+                this.selectedSubEvent = null;
+
+                const eventTypeError = document.getElementById('eventTypeError');
+                if (eventTypeError) eventTypeError.style.display = 'none';
+
+                // Si se selecciona "Otro", redirigir directamente (mismo patrón que flight)
+                if (this.selectedEventType === 'other') {
+                    this.navigateDirectlyToOther();
+                    return;
+                }
+
+                this.showSubEventCard();
+
+                setTimeout(() => {
+                    const subEventCard = document.getElementById('subEventCard');
+                    if (subEventCard && subEventCard.style.display !== 'none') {
+                        subEventCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }, 150);
+
+                this.validateForm();
+            }
+
+            navigateDirectlyToOther() {
+                const data = {
+                    cargoEventType: 'other',
+                    subEventType: 'other',
+                    timestamp: new Date().toISOString()
+                };
+                sessionStorage.setItem('cargoEventData', JSON.stringify(data));
+                window.location.href = 'title_desc.html';
+            }
+
+            showSubEventCard() {
+                const subEventCard = document.getElementById('subEventCard');
+                const subSelect = document.getElementById('subEventType');
+
+                if (this.subOptions[this.selectedEventType]) {
+                    subSelect.innerHTML = '<option value="">Seleccione...</option>';
+                    this.subOptions[this.selectedEventType].forEach(option => {
+                        const optionElement = document.createElement('option');
+                        optionElement.value = option.value;
+                        optionElement.text = option.text;
+                        subSelect.appendChild(optionElement);
+                    });
+                    subEventCard.style.display = 'block';
+                    subSelect.required = true;
+                } else {
+                    // No hay submenú para esta categoría: ocultamos y habilitamos botón
+                    subEventCard.style.display = 'none';
+                    subSelect.required = false;
+                    this.selectedSubEvent = null;
+                    this.validateForm();
+                }
+
+                subSelect.value = '';
+            }
+
+            validateForm() {
+                const nextBtn = document.getElementById('nextPageBtn');
+                let isValid = true;
+
+                if (!this.selectedEventType) {
+                    isValid = false;
+                } else if (this.subOptions[this.selectedEventType]) {
+                    if (!this.selectedSubEvent || this.selectedSubEvent === '') isValid = false;
+                }
+
+                if (nextBtn) nextBtn.disabled = !isValid;
+                return isValid;
+            }
+
+            navigateToSpecificForm() {
+                if (!this.validateForm()) return;
+
+                const data = {
+                    cargoEventType: this.selectedEventType,
+                    subEventType: this.selectedSubEvent || this.selectedEventType,
+                    timestamp: new Date().toISOString()
+                };
+                sessionStorage.setItem('cargoEventData', JSON.stringify(data));
+
+                const targetPage = this.routes[this.selectedSubEvent] || this.routes[this.selectedEventType] || 'title_desc.html';
+                window.location.href = targetPage;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const formInstance = new CargoEventForm();
+            window.cargoEventForm = formInstance;
+        });
+    </script>
+</body>
+</html>

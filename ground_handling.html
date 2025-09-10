@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario Específico - Operaciones en Tierra</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">🚛</div>
+            <div>
+                <h1>Formulario Específico - Operaciones en Tierra</h1>
+                <p>Registro de eventos y peligros relacionados con operaciones en tierra</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Barra de progreso -->
+        <div class="progress-indicator">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="step-text">Paso 2 de 6: Detalle del Evento</div>
+        </div>
+
+        <!-- Formulario específico -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Tipo de Evento de Operaciones en Tierra</h2>
+                <p>Seleccione el tipo de evento que desea reportar</p>
+            </div>
+            <div class="card-body">
+                <div id="eventTypeError" class="alert alert-error" style="display: none;">
+                    <strong>Error:</strong> Debe seleccionar un tipo de evento antes de continuar.
+                </div>
+
+                <div class="area-selection">
+                    <div class="area-card" data-event="aircraft_movement" title="Eventos durante movimiento de aeronaves">
+                        <div class="area-icon">✈️</div>
+                        <div class="area-title">Movimiento de Aeronaves</div>
+                    </div>
+
+                    <div class="area-card" data-event="fueling" title="Eventos durante el proceso de tanqueo">
+                        <div class="area-icon">⛽</div>
+                        <div class="area-title">Tanqueo de Aeronaves</div>
+                    </div>
+
+                    <div class="area-card" data-event="loading_unloading" title="Eventos durante cargue y descargue">
+                        <div class="area-icon">📦</div>
+                        <div class="area-title">Cargue-Descargue</div>
+                    </div>
+
+                    <div class="area-card" data-event="dangerous_goods" title="Eventos con mercancías peligrosas">
+                        <div class="area-icon">⚠️</div>
+                        <div class="area-title">Mercancías Peligrosas</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card para detalle específico -->
+        <div class="card" id="subEventCard" style="display:none;">
+            <div class="card-header">
+                <h2>Detalle Específico</h2>
+                <p>Seleccione el detalle específico del evento</p>
+            </div>
+            <div class="card-body">
+                <div class="form-group full-width">
+                    <label for="subEventType">Detalle Específico <span class="required">*</span></label>
+                    <select id="subEventType" name="subEventType">
+                        <option value="">Seleccione...</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botón continuar -->
+        <div class="card">
+            <div class="card-body">
+                <div class="form-actions">
+                    <button type="button" class="btn" id="nextPageBtn" disabled>Continuar al Formulario Específico</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        class GroundHandlingForm {
+            constructor() {
+                this.selectedEventType = null;
+                this.selectedSubEvent = null;
+                this.init();
+            }
+
+            init() {
+                const progressFill = document.getElementById('progressFill');
+                if (progressFill) progressFill.style.width = '33.33%';
+
+                this.bindEvents();
+                this.setupSubEventOptions();
+                this.setupPageRoutes();
+            }
+
+            setupPageRoutes() {
+                this.routes = {
+                    // Movimiento de Aeronaves
+                    'communication_errors': 'GRH/communication_errors_form.html',
+                    'aircraft_strikes': 'GRH/aircraft_strikes_form.html',
+                    'equipment_damage': 'GRH/equipment_damage_form.html',
+                    'infrastructure_issues': 'GRH/infrastructure_issues_form.html',
+                    'fod_events': 'GRH/fod_events_form.html',
+                    'other_aircraft_movement': 'title_desc.html',
+                    // Tanqueo
+                    'fueling': 'GRH/fueling_errors_form.html',
+                    'fuel_spills': 'title_desc.html',
+                    'equipment_failure': 'title_desc.html',
+                    'blocked_emergency_routes': 'title_desc.html',
+                    'contaminated_fuel':'title_desc.html',
+                    'other_fueling' : 'title_desc.html',
+                    // Cargue-Descargue
+                    'equipment_malfunction': 'GRH/equipment_damage_form.html',
+                    'aircraft_damage': 'GRH/aircraft_strikes_form.html',
+                    'cargo_discrepancies': 'GRH/cargo_discrepancies_form.html',
+                    'cargo_handling': 'GRH/cargo_handling_form.html',
+                    'dangerous_goods': 'CGO/dangerous_goods_form.html', 
+                    'other_fueling':'title_desc.html',
+                    // Mercancías Peligrosas
+                    'dangerous_goods_general': 'CGO/dangerous_goods_form.html'
+                };
+            }
+
+            setupSubEventOptions() {
+                this.subOptions = {
+                    aircraft_movement: [
+                        {value:'communication_errors', text:'Errores en comunicación tierra - avión'},
+                        {value:'aircraft_strikes', text:'Golpes a la aeronave'},
+                        {value:'equipment_damage', text:'Daños - Falla de equipos de tierra'},
+                        {value:'infrastructure_issues', text:'Infraestructura aeroportuaria mal estado - inadecuada'},
+                        {value:'fod_events', text:'Daños por objetos extraños - (FOD)'},
+                        {value:'other_aircraft_movement', text:'Otro'}
+                    ],
+                    
+
+                    loading_unloading: [
+                        {value:'equipment_malfunction', text:'Falla o equipos en mal estado'},
+                        {value:'aircraft_damage', text:'Golpes a la aeronave'},
+                        {value:'cargo_discrepancies', text:'Discrepancias de carga'},
+                        {value:'cargo_handling', text:'Manipulación de carga - equipaje'},
+                        {value:'dangerous_goods_general', text:'Mercancías peligrosas'},
+                        {value:'other_fueling', text:'Otro'}
+                    ]
+                };
+            }
+
+            bindEvents() {
+                document.querySelectorAll('.area-card[data-event]').forEach(card => {
+                    card.addEventListener('click', () => this.selectEventType(card));
+                });
+
+                const subSelect = document.getElementById('subEventType');
+                if (subSelect) {
+                    subSelect.addEventListener('change', () => {
+                        this.selectedSubEvent = subSelect.value || null;
+                        this.validateForm();
+                    });
+                }
+
+                const nextBtn = document.getElementById('nextPageBtn');
+                if (nextBtn) {
+                    nextBtn.addEventListener('click', () => this.navigateToSpecificForm());
+                }
+            }
+
+            selectEventType(selectedCard) {
+                document.querySelectorAll('.area-card[data-event]').forEach(card => {
+                    card.classList.remove('selected');
+                });
+
+                selectedCard.classList.add('selected');
+                this.selectedEventType = selectedCard.dataset.event;
+                this.selectedSubEvent = null;
+
+                const eventTypeError = document.getElementById('eventTypeError');
+                if (eventTypeError) eventTypeError.style.display = 'none';
+
+                this.showSubEventCard();
+
+                setTimeout(() => {
+                    const subEventCard = document.getElementById('subEventCard');
+                    if (subEventCard && subEventCard.style.display !== 'none') {
+                        subEventCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }, 150);
+
+                this.validateForm();
+            }
+
+            showSubEventCard() {
+                const subEventCard = document.getElementById('subEventCard');
+                const subSelect = document.getElementById('subEventType');
+
+                if (this.subOptions[this.selectedEventType]) {
+                    subSelect.innerHTML = '<option value="">Seleccione...</option>';
+
+                    this.subOptions[this.selectedEventType].forEach(option => {
+                        const optionElement = document.createElement('option');
+                        optionElement.value = option.value;
+                        optionElement.text = option.text;
+                        subSelect.appendChild(optionElement);
+                    });
+
+                    subEventCard.style.display = 'block';
+                    subSelect.required = true;
+                } else {
+                    subEventCard.style.display = 'none';
+                    subSelect.required = false;
+                }
+
+                this.selectedSubEvent = null;
+                subSelect.value = '';
+            }
+
+            validateForm() {
+                const nextBtn = document.getElementById('nextPageBtn');
+                let isValid = true;
+
+                if (!this.selectedEventType) {
+                    isValid = false;
+                } else if (this.subOptions[this.selectedEventType]) {
+                    if (!this.selectedSubEvent || this.selectedSubEvent === '') isValid = false;
+                }
+
+                if (nextBtn) nextBtn.disabled = !isValid;
+                return isValid;
+            }
+
+            navigateToSpecificForm() {
+                if (!this.validateForm()) return;
+
+                const data = {
+                    groundEventType: this.selectedEventType,
+                    subEventType: this.selectedSubEvent || this.selectedEventType,
+                    timestamp: new Date().toISOString()
+                };
+                sessionStorage.setItem('groundHandlingData', JSON.stringify(data));
+
+                const targetPage = this.routes[this.selectedSubEvent] || this.routes[this.selectedEventType] || 'general_form.html';
+                window.location.href = targetPage;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const formInstance = new GroundHandlingForm();
+            window.groundHandlingForm = formInstance;
+        });
+    </script>
+</body>
+</html>

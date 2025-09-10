@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario Bird Strike - Operaciones de Vuelo</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">✈</div>
+            <div>
+                <h1>Bird Strike</h1>
+                <p>Registro detallado de evento de impacto con aves</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Barra de progreso -->
+        <div class="progress-indicator">
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 50%;"></div>
+            </div>
+            <div class="step-text">Paso 3 de 6: Información Específica - Bird Strike</div>
+        </div>
+
+        <form id="birdStrikeForm">
+            <!-- Información de las Aves -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Información de las Aves</h2>
+                    <p>Complete los detalles sobre las aves involucradas en el evento</p>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="avesObservadas">¿Cuántas aves observó antes del impacto? <span class="required">*</span></label>
+                        <select id="avesObservadas" name="avesObservadas" required>
+                            <option value="">Seleccione...</option>
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2-10">2-10</option>
+                            <option value="11-100">11-100</option>
+                            <option value="+100">+100</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="avesImpacto">¿Cuántas aves golpearon la aeronave? <span class="required">*</span></label>
+                        <select id="avesImpacto" name="avesImpacto" required>
+                            <option value="">Seleccione...</option>
+                            <option value="1">1</option>
+                            <option value="2-10">2-10</option>
+                            <option value="11-100">11-100</option>
+                            <option value="+100">+100</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="tamanoAves">¿Cómo describiría el tamaño de las aves? <span class="required">*</span></label>
+                        <select id="tamanoAves" name="tamanoAves" required>
+                            <option value="">Seleccione...</option>
+                            <option value="pequeno">Pequeño</option>
+                            <option value="mediano">Mediano</option>
+                            <option value="grande">Grande</option>
+                            <option value="desconocido">Desconocido</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detalles del Impacto -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Detalles del Impacto</h2>
+                    <p>Información específica sobre el impacto y la aeronave</p>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="parteAeronave">¿Qué parte de la aeronave fue golpeada? <span class="required">*</span></label>
+                        <select id="parteAeronave" name="parteAeronave" required>
+                            <option value="">Seleccione...</option>
+                            <option value="motor">Motor</option>
+                            <option value="alas">Alas</option>
+                            <option value="fuselaje">Fuselaje</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="avisoAves">¿Recibió aviso o detección de aves antes del impacto? <span class="required">*</span></label>
+                        <select id="avisoAves" name="avisoAves" required>
+                            <option value="">Seleccione...</option>
+                            <option value="si">Sí</option>
+                            <option value="no">No</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="informoATC">¿Informó el impacto al control de tráfico aéreo? <span class="required">*</span></label>
+                        <select id="informoATC" name="informoATC" required>
+                            <option value="">Seleccione...</option>
+                            <option value="si">Sí</option>
+                            <option value="no">No</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Condiciones del Vuelo -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Condiciones del Vuelo</h2>
+                    <p>Parámetros de vuelo al momento del evento</p>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="estadoCielo">¿Cómo estaba el cielo en ese momento? <span class="required">*</span></label>
+                        <select id="estadoCielo" name="estadoCielo" required>
+                            <option value="">Seleccione...</option>
+                            <option value="despejado">Despejado</option>
+                            <option value="algunas_nubes">Algunas nubes</option>
+                            <option value="cubierto">Cubierto</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="velocidadIndicada">¿Cuál era la velocidad indicada (en nudos)? <span class="required">*</span></label>
+                        <input type="number" id="velocidadIndicada" name="velocidadIndicada" min="0" max="999" placeholder="Ej: 250" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="alturaAGL">¿A qué altura sobre el terreno (AGL, en pies) ocurrió el impacto? <span class="required">*</span></label>
+                        <input type="number" id="alturaAGL" name="alturaAGL" min="0" max="50000" placeholder="Ej: 1500" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="pistaEvento">¿En qué pista ocurrió el evento?</label>
+                        <input type="text" id="pistaEvento" name="pistaEvento" placeholder="Ej: 07R, 25L, 13/31" maxlength="10">
+                        <small class="help-text">Ingrese la designación de la pista (opcional si no aplica)</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Acciones Posteriores -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Acciones Posteriores</h2>
+                    <p>Medidas tomadas después del impacto</p>
+                </div>
+                <div class="card-body">
+                    <div class="form-group full-width">
+                        <label for="accionesImpacto">¿Qué acciones o efectos hubo tras el impacto? <span class="required">*</span></label>
+                        <select id="accionesImpacto" name="accionesImpacto" required>
+                            <option value="">Seleccione...</option>
+                            <option value="regreso">Regreso</option>
+                            <option value="desvio">Desvío</option>
+                            <option value="emergencia">Emergencia</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                    </div>
+
+            
+                </div>
+            </div>
+
+            <!-- Botones de navegación -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-actions">
+                        <button type="button" class="btn" onclick="history.back()" style="background: var(--text-gray);">Regresar</button>
+                        <button type="submit" class="btn">Continuar a Descripción del Evento</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedData = sessionStorage.getItem('flightEventData');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                console.log('Datos cargados para Bird Strike:', data);
+            }
+
+            document.getElementById('birdStrikeForm').addEventListener('submit', handleFormSubmit);
+
+            function handleFormSubmit(e) {
+                e.preventDefault();
+
+                // Validar campos requeridos
+                const requiredFields = ['avesObservadas', 'avesImpacto', 'tamanoAves', 'parteAeronave', 'avisoAves', 'informoATC', 'estadoCielo', 'velocidadIndicada', 'alturaAGL', 'accionesImpacto'];
+                let isValid = true;
+
+                requiredFields.forEach(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    if (!field.value.trim()) {
+                        field.style.borderColor = '#dc3545';
+                        isValid = false;
+                    } else {
+                        field.style.borderColor = '';
+                    }
+                });
+
+                if (!isValid) {
+                    alert('Por favor complete todos los campos obligatorios marcados con *');
+                    return;
+                }
+
+                const formData = new FormData(e.target);
+                const birdStrikeData = {};
+                
+                for (let [key, value] of formData.entries()) {
+                    birdStrikeData[key] = value;
+                }
+
+                const existingData = JSON.parse(sessionStorage.getItem('flightEventData') || '{}');
+                const combinedData = { ...existingData, birdStrikeDetails: birdStrikeData };
+                
+                sessionStorage.setItem('flightEventData', JSON.stringify(combinedData));
+                
+                console.log('Datos de Bird Strike guardados:', birdStrikeData);
+                window.location.href = '../title_desc.html';
+            }
+
+            // Validación en tiempo real para campos numéricos
+            document.getElementById('velocidadIndicada').addEventListener('input', function(e) {
+                if (e.target.value < 0) e.target.value = 0;
+                if (e.target.value > 999) e.target.value = 999;
+            });
+            
+            document.getElementById('alturaAGL').addEventListener('input', function(e) {
+                if (e.target.value < 0) e.target.value = 0;
+                if (e.target.value > 50000) e.target.value = 50000;
+            });
+        });
+    </script>
+</body>
+</html>
