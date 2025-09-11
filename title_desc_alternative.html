@@ -186,7 +186,7 @@
                 const existingData = JSON.parse(sessionStorage.getItem('safetyReportData')||'{}');
                 const newData = {...existingData, report:{title:titleInput.value, description:descInput.value}};
                 sessionStorage.setItem('safetyReportData', JSON.stringify(newData));
-                window.location.href='flight_info_mandatory.html';
+                window.location.href='flight_info.html';
             });
         }
     </script>

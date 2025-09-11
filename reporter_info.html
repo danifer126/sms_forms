@@ -53,6 +53,17 @@
                             <input type="email" id="email" name="email" required placeholder="correo@ejemplo.com">
                             <span class="error-message" id="emailError"></span>
                         </div>
+                        <div class="form-group">
+                            <label for="email">Área a la que pertenezco</label>
+                            <input type="text" id="area_reportante" name="area_reportante" maxlength="40">
+                            <span class="error-message" id="areaError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Base a la que pertenezco</label>
+                            <input type="text" id="base_reportante" name="base_reportante" pattern="^[A-Z]{3}$" 
+                            placeholder="Código IATA: BOG, MDE, CLO..."  maxlength="3" style="text-transform: uppercase;">
+                            <span class="error-message" id="baseError"></span>
+                        </div>
 
                         <!--
                         <div class="form-group">
@@ -102,11 +113,29 @@
                 this.setupFieldValidation();
                 this.bindEvents();
                 this.loadExistingData();
+                this.setupUppercaseInput();
+            }
+
+            setupUppercaseInput() {
+                const baseInput = document.getElementById('base_reportante');
+                if (baseInput) {
+                    baseInput.addEventListener('input', (e) => {
+                        e.target.value = e.target.value.toUpperCase();
+                    });
+                    
+                    // También convertir a mayúsculas cuando se pegue texto
+                    baseInput.addEventListener('paste', (e) => {
+                        setTimeout(() => {
+                            e.target.value = e.target.value.toUpperCase();
+                        }, 10);
+                    });
+                }
             }
 
             setupFieldValidation() {
                 const fields = [
                     { id: 'firstName', name: 'Nombre', pattern: /^[A-Za-zÀ-ÿ\s]+$/ },
+                    { id: 'base_reportante', name: 'Base', pattern: /^[A-Z]{3}$/ },
                     { id: 'lastName', name: 'Apellido', pattern: /^[A-Za-zÀ-ÿ\s]+$/ },
                     { id: 'email', name: 'Correo', pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ },
                     { id: 'phone', name: 'Teléfono', pattern: /^\d{7,15}$/ }
