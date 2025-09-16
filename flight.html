@@ -11,8 +11,8 @@
         <div class="header-content">
             <div class="logo">✈</div>
             <div>
-                <h1>Formulario Específico - Operaciones de Vuelo</h1>
-                <p>Registro de eventos y peligros relacionados con operaciones de vuelo</p>
+                <h1>Sistema de Reportes de Seguridad Operacional</h1>
+                <p>Registro de Eventos y Peligros</p>
             </div>
         </div>
     </header>
@@ -29,9 +29,12 @@
         <!-- Formulario específico -->
         <div class="card">
             <div class="card-header">
-                <h2>Tipo de Evento de Vuelo</h2>
-                <p>Seleccione el tipo de evento que desea reportar</p>
+                <h2>¿Qué tipo de evento ocurrió durante la Operación de Vuelo?</h2>
+                <p>Seleccione la opción que mejor describe lo que desea reportar</p>
             </div>
+
+
+
             <div class="card-body">
                 <div id="eventTypeError" class="alert alert-error" style="display: none;">
                     <strong>Error:</strong> Debe seleccionar un tipo de evento antes de continuar.
@@ -101,6 +104,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="form-actions">
+                    <button type="button" class="btn" onclick="history.back()" style="background: var(--text-gray);">Regresar</button>
                     <button type="button" class="btn" id="nextPageBtn" disabled>Continuar al Formulario Específico</button>
                 </div>
             </div>

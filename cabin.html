@@ -9,10 +9,10 @@
 <body>
     <header class="header">
         <div class="header-content">
-            <div class="logo">✈</div>
+            <div class="logo">👥</div>
             <div>
-                <h1>Formulario Específico - Operaciones de Cabina</h1>
-                <p>Registro de eventos y peligros relacionados con operaciones de cabina de pasajeros</p>
+                <h1>Cabina de pasajeros</h1>
+                <p>Registro de eventos y peligros relacionados con la cabina de pasajeros</p>
             </div>
         </div>
     </header>
@@ -29,8 +29,8 @@
         <!-- Formulario específico -->
         <div class="card">
             <div class="card-header">
-                <h2>Tipo de Evento de Cabina</h2>
-                <p>Seleccione el tipo de evento que desea reportar</p>
+               <h2>¿Qué tipos de evento ocurrió en la cabina de pasajeros?</h2>
+                <p>Seleccione la categoría de evento que mejor describe lo que desea reportar</p>
             </div>
             <div class="card-body">
                 <div id="eventTypeError" class="alert alert-error" style="display: none;">
@@ -102,6 +102,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="form-actions">
+                     <button type="button" class="btn" onclick="history.back()" style="background: var(--text-gray);">Regresar</button>
                     <button type="button" class="btn" id="nextPageBtn" disabled>Continuar al Formulario Específico</button>
                 </div>
             </div>

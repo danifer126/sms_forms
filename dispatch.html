@@ -10,9 +10,9 @@
 <body>
     <header class="header">
         <div class="header-content">
-            <div class="logo">✈</div>
+            <div class="logo">📡</div>
             <div>
-                <h1>Formulario Específico - Control de Vuelos y Despacho</h1>
+                <h1>Control de Vuelos y Despacho</h1>
                 <p>Registro de eventos y peligros relacionados con despacho de aeronaves</p>
             </div>
         </div>
@@ -30,8 +30,8 @@
         <!-- Formulario específico -->
         <div class="card">
             <div class="card-header">
-                <h2>Tipo de Evento de Despacho</h2>
-                <p>Seleccione el tipo de evento que desea reportar</p>
+                <h2>¿Qué tipo de evento ocurrió en el Control de vuelos y Despacho?</h2>
+                <p>Seleccione la opción que mejor describe lo que desea reportar</p>
             </div>
             <div class="card-body">
                 <div id="eventTypeError" class="alert alert-error" style="display: none;">
@@ -92,6 +92,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="form-actions">
+                    <button type="button" class="btn" onclick="history.back()" style="background: var(--text-gray);">Regresar</button>
                     <button type="button" class="btn" id="nextPageBtn" disabled>Continuar al Formulario Específico</button>
                 </div>
             </div>

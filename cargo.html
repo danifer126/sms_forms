@@ -11,8 +11,8 @@
         <div class="header-content">
             <div class="logo">📦</div>
             <div>
-                <h1>Formulario Específico - Cargo</h1>
-                <p>Registro de eventos relacionados con operaciones de manejo de carga</p>
+               <h1>Operaciones de carga de aeronaves</h1>
+                <p>Registro de eventos y peligros relacionados con las operaciones de carga</p>
             </div>
         </div>
     </header>
@@ -29,8 +29,8 @@
         <!-- Selección de tipo de evento -->
         <div class="card">
             <div class="card-header">
-                <h2>Tipo de Evento de Cargo</h2>
-                <p>Seleccione el tipo de evento que desea reportar</p>
+                <h2>¿Qué tipo de evento ocurrió en las Operaciones de Carga?</h2>
+                <p>Seleccione la opción que mejor describe lo que desea reportar</p>
             </div>
             <div class="card-body">
                 <div id="eventTypeError" class="alert alert-error" style="display: none;">
@@ -82,6 +82,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="form-actions">
+                    <button type="button" class="btn" onclick="history.back()" style="background: var(--text-gray);">Regresar</button>
                     <button type="button" class="btn" id="nextPageBtn" disabled>Continuar al Formulario Específico</button>
                 </div>
             </div>

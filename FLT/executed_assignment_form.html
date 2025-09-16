@@ -39,15 +39,10 @@
                         <input type="time" id="startTime" name="startTime" required>
                     </div>
                 </div>
-            </div>
 
-            <!-- Nivel de Alerta -->
-            <div class="card">
-                <div class="card-header">
-                    <h2>Nivel de Alerta</h2>
-                    <p>Evalúe su nivel de alerta percibido durante la asignación</p>
-                </div>
-                <div class="card-body">
+                    <!-- Nivel de Alerta -->
+
+                 <div class="card-body">
                     <div class="form-group full-width">
                         <label for="alertLevel">Nivel de alerta percibido en la asignación reportada <span class="required">*</span></label>
                         <select id="alertLevel" name="alertLevel" required>
@@ -64,15 +59,10 @@
                         </select>
                     </div>
                 </div>
-            </div>
 
-            <!-- Información del Descanso -->
-            <div class="card">
-                <div class="card-header">
-                    <h2>Información del Descanso Previo</h2>
-                    <p>Detalles sobre el descanso antes de la asignación</p>
-                </div>
-                <div class="card-body">
+
+
+                 <div class="card-body">
                     <div class="form-group full-width">
                         <label for="napDuration">Si antes de iniciar la asignación tomó una siesta ¿Cuánto tiempo duró esta siesta?</label>
                         <select id="napDuration" name="napDuration">
@@ -86,7 +76,60 @@
                         </select>
                     </div>
                 </div>
+
+
+
             </div>
+
+        
+        
+
+
+            
+
+
+
+
+
+
+
+<!-- Factores Causales y Evaluación del Descanso -->
+
+
+<!--Factores que pudieron contribuir a la fatiga -->
+
+<div class="card">
+  <div class="card-header">
+    <h2>Información sobre condiciones previas</h2>
+    <p>Detalles las situaciones que pudieron afectar el descanso antes de la asignación</p>
+  </div>
+
+  <div class="card-body">
+    <!-- Pregunta de Factores Personales en bloque completo -->
+    <div class="form-group full-width" style="margin-top: 1.5rem;">
+      <label>De la siguiente lista, indique qué situaciones personales o condiciones pudieron haber afectado la calidad de su descanso antes de la asignación. <span class="required">*</span></label>
+      <div class="checkbox-group" style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
+
+        <label class="checkbox-item"><input type="checkbox" name="personalFactors[]" value="inici_asignacion"> Cansancio al iniciar la asignación</label>
+        <label class="checkbox-item"><input type="checkbox" name="personalFactors[]" value="hotel_inadeacuado"> Descanso en el hotel fue inadecuado</label>
+        <label class="checkbox-item"><input type="checkbox" name="personalFactors[]" value="casa_inadecuada"> Descanso en casa fue inadecuado</label>
+        <label class="checkbox-item"><input type="checkbox" name="personalFactors[]" value="descanso_asignacion_inadecuada"> Descanso durante la asignación fue insuficiente o interrumpido</label>
+        <label class="checkbox-item"><input type="checkbox" name="personalFactors[]" value="programacion"> Horario de la programación afecto el descanso</label>
+        <label class="checkbox-item"><input type="checkbox" name="personalFactors[]" value="problemas_salud"> Problemas de salud, enfermedad reciente o malestar físico</label>
+        <label class="checkbox-item"><input type="checkbox" name="personalFactors[]" value="trastorno_sueno"> Trastorno del sueño (p. ej. insomnio, apnea)</label>
+        <label class="checkbox-item"><input type="checkbox" name="personalFactors[]" value="estres_ansiedad"> Estrés o ansiedad</label>
+        <label class="checkbox-item"><input type="checkbox" name="personalFactors[]" value="responsabilidades_familiares"> Responsabilidades familiares / cuidado de dependientes</label>
+        <label class="checkbox-item"><input type="checkbox" name="personalFactors[]" value="desplazamientos_largos"> Desplazamientos largos (commuting)</label>
+        <label class="checkbox-item"><input type="checkbox" name="personalFactors[]" value="jet_lag"> Jet lag / cambio de huso horario</label>
+        <label class="checkbox-item"><input type="checkbox" name="personalFactors[]" value="deshidratacion"> Poca hidratación</label>
+        <label class="checkbox-item"><input type="checkbox" name="personalFactors[]" value="alimentacion"> Alimentación</label>
+        <label class="checkbox-item"><input type="checkbox" name="personalFactors[]" value="ninguno"> Ninguno de los anteriores</label>
+      
+      </div>
+    </div>
+  </div>
+</div>
+
 
             <!-- Horarios de Sueño -->
             <div class="card">
